@@ -63,6 +63,8 @@ public class EventoService {
     public void delete(Integer id) {
         Evento existente = findById(id);
 
+        ticketRepository.deleteByEvento_Id(id);
+
         eventoRepository.delete(existente);
     }
 

@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
-    
+    void deleteByEvento_Id(Integer eventoId);
 }
