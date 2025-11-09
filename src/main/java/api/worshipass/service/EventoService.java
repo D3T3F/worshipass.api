@@ -5,7 +5,11 @@
 package api.worshipass.service;
 
 import api.worshipass.domain.Evento;
+import api.worshipass.domain.Ticket;
 import api.worshipass.repository.EventoRepository;
+import api.worshipass.repository.TicketRepository;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,10 +20,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EventoService {
-private final EventoRepository eventoRepository;
 
-    public EventoService(EventoRepository eventoRepository){
+    private final EventoRepository eventoRepository;
+    private final TicketRepository ticketRepository;
+
+    public EventoService(EventoRepository eventoRepository, TicketRepository ticketRepository) {
         this.eventoRepository = eventoRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @Transactional(readOnly = true)
@@ -36,7 +43,7 @@ private final EventoRepository eventoRepository;
     @Transactional
     public Evento create(Evento evento) {
         evento.setId(null);
-        
+
         return eventoRepository.save(evento);
     }
 
@@ -55,7 +62,26 @@ private final EventoRepository eventoRepository;
     @Transactional
     public void delete(Integer id) {
         Evento existente = findById(id);
-        
+
         eventoRepository.delete(existente);
+    }
+
+    @Transactional
+    public void generateTickets(Integer id) {
+        Evento evento = findById(id);
+
+        List<Ticket> tickets = new ArrayList();
+
+        for (int i = 0; i < evento.getCapacidadeTotal(); i++) {
+            Ticket ticket = new Ticket();
+
+            ticket.setDataEmissao(LocalDateTime.now());
+            ticket.setEvento(evento);
+            ticket.setStatus("Disponivel");
+
+            tickets.add(ticket);
+        }
+
+        ticketRepository.saveAll(tickets);
     }
 }

@@ -68,4 +68,11 @@ public class EventoController {
         
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/generateTickets/{id}")
+    ResponseEntity<String> generateTickets(@PathVariable Integer id) {
+        eventoService.generateTickets(id);
+        
+        return ResponseEntity.noContent().build();
+    }
 }
