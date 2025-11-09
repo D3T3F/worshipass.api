@@ -7,10 +7,10 @@ package api.worshipass.service;
 import api.worshipass.domain.Usuario;
 import api.worshipass.repository.UsuarioRepository;
 import api.worshipass.utils.HashUtil;
-import com.nimbusds.jose.JOSEException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,6 +94,10 @@ public class UsuarioService {
         String password = usuario.getSenha();
         
         usuario.setSenha(HashUtil.sha256(password));
+        
+        Optional<Usuario> found = usuarioRepository.findByUsuario(usuario.getUsuario());
+        
+        if(!found.isEmpty()) throw new RuntimeException("Usuario ja existente");
         
         return usuarioRepository.save(usuario);
     }

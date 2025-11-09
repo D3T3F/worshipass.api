@@ -70,13 +70,11 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
+    @PostMapping("/create")
+    public ResponseEntity<String> create(@RequestBody Usuario usuario) {
         Usuario salvo = usuarioService.create(usuario);
         
-        return ResponseEntity
-                .created(URI.create("/usuarios/" + salvo.getId()))
-                .body(salvo);
+        return ResponseEntity.ok("Usuario criado com sucesso");
     }
 
     @PutMapping("/{id}")
