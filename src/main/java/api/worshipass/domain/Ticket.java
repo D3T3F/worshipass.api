@@ -49,6 +49,7 @@ public class Ticket implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "IdParticipante")
+    @JsonBackReference
     private Participante participante;
 
     @ManyToOne(fetch = FetchType.LAZY)
