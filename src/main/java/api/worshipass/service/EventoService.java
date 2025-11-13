@@ -8,7 +8,9 @@ import api.worshipass.domain.Evento;
 import api.worshipass.domain.Ticket;
 import api.worshipass.repository.EventoRepository;
 import api.worshipass.repository.TicketRepository;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -85,5 +87,16 @@ public class EventoService {
         }
 
         ticketRepository.saveAll(tickets);
+    }
+
+    @Transactional
+    public List<Evento> findToday() {
+        LocalDate hoje = LocalDate.now();
+
+        LocalDateTime startDate = hoje.atStartOfDay();
+
+        LocalDateTime endDate = hoje.atTime(LocalTime.MAX);
+
+        return eventoRepository.findByDataEventoBetween(startDate, endDate);
     }
 }

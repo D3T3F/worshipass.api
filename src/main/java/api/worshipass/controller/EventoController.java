@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/eventos")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EventoController {
-    
+
     private final EventoService eventoService;
 
     public EventoController(EventoService eventoService) {
@@ -40,16 +40,16 @@ public class EventoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Evento> getOne(@PathVariable Integer id){
+    public ResponseEntity<Evento> getOne(@PathVariable Integer id) {
         Evento evento = eventoService.findById(id);
-        
+
         return ResponseEntity.ok(evento);
     }
 
     @PostMapping
     public ResponseEntity<Evento> create(@RequestBody Evento evento) {
         Evento salvo = eventoService.create(evento);
-        
+
         return ResponseEntity
                 .created(URI.create("/eventos/" + salvo.getId()))
                 .body(salvo);
@@ -58,21 +58,27 @@ public class EventoController {
     @PutMapping("/{id}")
     public ResponseEntity<Evento> update(@PathVariable Integer id, @RequestBody Evento evento) {
         Evento atualizado = eventoService.update(id, evento);
-        
+
         return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         eventoService.delete(id);
-        
+
         return ResponseEntity.noContent().build();
     }
-    
+
     @GetMapping("/generateTickets/{id}")
     ResponseEntity<String> generateTickets(@PathVariable Integer id) {
         eventoService.generateTickets(id);
-        
+
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/hoje")
+    public ResponseEntity<List<Evento>> getToday() {
+        List<Evento> eventos = eventoService.findToday();
+        return ResponseEntity.ok(eventos);
     }
 }
