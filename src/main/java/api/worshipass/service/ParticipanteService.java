@@ -5,6 +5,8 @@
 package api.worshipass.service;
 
 import api.worshipass.domain.Participante;
+import api.worshipass.dto.ParticipanteComTicketsDto;
+import api.worshipass.mapper.ParticipanteMapper;
 import api.worshipass.repository.ParticipanteRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,15 +18,19 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ParticipanteService {
+
     private final ParticipanteRepository participanteRepository;
 
-    public ParticipanteService(ParticipanteRepository participanteRepository){
+    public ParticipanteService(ParticipanteRepository participanteRepository) {
         this.participanteRepository = participanteRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<Participante> findAll() {
-        return participanteRepository.findAll();
+    public List<ParticipanteComTicketsDto> findAll() {
+        return participanteRepository.findAll()
+                .stream()
+                .map(ParticipanteMapper::toComTickets)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -36,7 +42,7 @@ public class ParticipanteService {
     @Transactional
     public Participante create(Participante participante) {
         participante.setId(null);
-        
+
         return participanteRepository.save(participante);
     }
 
@@ -54,7 +60,7 @@ public class ParticipanteService {
     @Transactional
     public void delete(Integer id) {
         Participante existente = findById(id);
-        
+
         participanteRepository.delete(existente);
     }
 }

@@ -6,6 +6,9 @@ package api.worshipass.service;
 
 import api.worshipass.domain.Evento;
 import api.worshipass.domain.Ticket;
+import api.worshipass.dto.EventoComTicketsDto;
+import api.worshipass.dto.EventoDto;
+import api.worshipass.mapper.EventoMapper;
 import api.worshipass.repository.EventoRepository;
 import api.worshipass.repository.TicketRepository;
 import java.time.LocalDate;
@@ -32,8 +35,11 @@ public class EventoService {
     }
 
     @Transactional(readOnly = true)
-    public List<Evento> findAll() {
-        return eventoRepository.findAll();
+    public List<EventoComTicketsDto> findAll() {
+        return eventoRepository.findAll()
+                .stream()
+                .map(EventoMapper::toComTickets)
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -90,13 +96,33 @@ public class EventoService {
     }
 
     @Transactional
-    public List<Evento> findToday() {
+    public List<EventoDto> findToday() {
         LocalDate hoje = LocalDate.now();
 
         LocalDateTime startDate = hoje.atStartOfDay();
 
         LocalDateTime endDate = hoje.atTime(LocalTime.MAX);
 
-        return eventoRepository.findByDataEventoBetween(startDate, endDate);
+        return eventoRepository
+                .findByDataEventoBetween(startDate, endDate)
+                .stream()
+                .map(EventoMapper::toDto)
+                .toList();
+    }
+
+    @Transactional
+    public void setTicketsUsed(Integer id) {
+        Evento evento = findById(id);
+
+        List<Ticket> tickets = evento.getTickets();
+
+        for (Ticket ticket : tickets) {
+            var participante = ticket.getParticipante();
+
+            ticket.setStatus(participante == null ? "Cancelado" : "Usado");
+            ticket.setDataUso(LocalDateTime.now());
+        }
+
+        ticketRepository.saveAll(tickets);
     }
 }

@@ -5,6 +5,7 @@
 package api.worshipass.controller;
 
 import api.worshipass.domain.Participante;
+import api.worshipass.dto.ParticipanteComTicketsDto;
 import api.worshipass.service.ParticipanteService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class ParticipanteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Participante>> getAll() {
+    public ResponseEntity<List<ParticipanteComTicketsDto>> getAll() {
         return ResponseEntity.ok(participanteService.findAll());
     }
 

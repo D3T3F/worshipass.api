@@ -5,6 +5,8 @@
 package api.worshipass.controller;
 
 import api.worshipass.domain.Evento;
+import api.worshipass.dto.EventoComTicketsDto;
+import api.worshipass.dto.EventoDto;
 import api.worshipass.service.EventoService;
 import java.net.URI;
 import java.util.List;
@@ -35,7 +37,7 @@ public class EventoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Evento>> getAll() {
+    public ResponseEntity<List<EventoComTicketsDto>> getAll() {
         return ResponseEntity.ok(eventoService.findAll());
     }
 
@@ -77,8 +79,15 @@ public class EventoController {
     }
 
     @GetMapping("/hoje")
-    public ResponseEntity<List<Evento>> getToday() {
-        List<Evento> eventos = eventoService.findToday();
+    public ResponseEntity<List<EventoDto>> getToday() {
+        List<EventoDto> eventos = eventoService.findToday();
         return ResponseEntity.ok(eventos);
+    }
+
+    @GetMapping("/setTicketsUsed/{id}")
+    ResponseEntity<String> setTicketsUsed(@PathVariable Integer id) {
+        eventoService.setTicketsUsed(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
