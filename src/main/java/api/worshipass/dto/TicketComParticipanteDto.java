@@ -13,4 +13,5 @@ import lombok.Data;
 @Data
 public class TicketComParticipanteDto extends TicketDto {
     private ParticipanteDto participante;
+    private ResgateLancheDto resgateLanche;
 }

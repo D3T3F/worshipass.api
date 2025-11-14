@@ -5,6 +5,8 @@
 package api.worshipass.service;
 
 import api.worshipass.domain.Lanche;
+import api.worshipass.dto.LancheDto;
+import api.worshipass.mapper.LancheMapper;
 import api.worshipass.repository.LancheRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,11 @@ public class LancheService {
     }
 
     @Transactional(readOnly = true)
-    public List<Lanche> findAll() {
-        return lancheRepository.findAll();
+    public List<LancheDto> findAll() {
+        return lancheRepository.findAll()
+                .stream()
+                .map(LancheMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)

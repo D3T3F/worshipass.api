@@ -5,6 +5,7 @@
 package api.worshipass.controller;
 
 import api.worshipass.domain.Lanche;
+import api.worshipass.dto.LancheDto;
 import api.worshipass.service.LancheService;
 import java.net.URI;
 import java.util.List;
@@ -34,7 +35,7 @@ public class LancheController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Lanche>> getAll() {
+    public ResponseEntity<List<LancheDto>> getAll() {
         return ResponseEntity.ok(lancheService.findAll());
     }
 

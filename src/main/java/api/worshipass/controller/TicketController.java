@@ -34,14 +34,14 @@ public class TicketController {
     @GetMapping("/{id}")
     public ResponseEntity<Ticket> getOne(@PathVariable Integer id) {
         Ticket ticket = ticketService.findById(id);
-        
+
         return ResponseEntity.ok(ticket);
     }
 
     @PostMapping
     public ResponseEntity<Ticket> create(@RequestBody Ticket ticket) {
         Ticket salvo = ticketService.create(ticket);
-        
+
         return ResponseEntity
                 .created(URI.create("/tickets/" + salvo.getId()))
                 .body(salvo);
@@ -50,14 +50,21 @@ public class TicketController {
     @PutMapping("/{id}")
     public ResponseEntity<Ticket> update(@PathVariable Integer id, @RequestBody Ticket ticket) {
         Ticket atualizado = ticketService.update(id, ticket);
-        
+
         return ResponseEntity.ok(atualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         ticketService.delete(id);
-        
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/reedemLanche")
+    public ResponseEntity<String> reedemLanche(@RequestParam("ticket") Integer ticketId, @RequestParam("lanche") Integer lancheId) {
+        ticketService.reedemLanche(ticketId, lancheId);
+
         return ResponseEntity.noContent().build();
     }
 }
